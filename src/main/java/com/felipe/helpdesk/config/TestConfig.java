@@ -7,8 +7,6 @@ import org.springframework.context.annotation.Profile;
 
 import com.felipe.helpdesk.Services.DBService;
 
-import jakarta.annotation.PostConstruct;
-
 @Configuration
 @Profile("test")
 public class TestConfig {
