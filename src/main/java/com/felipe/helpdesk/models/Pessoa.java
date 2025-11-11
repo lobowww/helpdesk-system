@@ -1,20 +1,44 @@
 package com.felipe.helpdesk.models;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.felipe.helpdesk.models.enums.Perfil;
 
-public abstract class Pessoa {
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
+@Entity //Anotação que indica que a classe Pessoa é uma entidade e que quero que uma tabela seja criada no banco, posso denominar a tabela caso queira '(name = "TB_PESSOA")'
+public abstract class Pessoa implements Serializable{//Essa implementação do serializable serve para que seja criada uma sequência de bytes para que os dados consigam ser trafegados em rede
+	private static final long serialVersionUID = 1L;
+	
+	@Id // Indorma que o atributo Id será o identificador da classe
+	@GeneratedValue(strategy = GenerationType.IDENTITY)//A geração do valor de Id terá a estratégia de passar a responsabilidade para o banco, ou seja, não é responsabilidade da API, para cada objeto o banco gera um ID diferente
     protected Integer id;
     protected String nome;
+    
+    @Column(unique = true)//Coluna única no banco, ou seja, não terá 2 cpfs iguais no mesmo banco
     protected String cpf;
+    
+    @Column(unique = true)
     protected String email;
     protected String senha;
+    
+    @ElementCollection(fetch = FetchType.EAGER)//Informando que esta é uma coleção, e quando der um get a lista de perfis tem que vir imediatamente juntamente ao usuário, por conta das rotas que serão criadas.
+    @CollectionTable(name = "PERFIS")//Informando que a tabela no banco será para uma coleção de dados e a nomea
     protected Set<Integer> perfis = new HashSet<>();
+    
+    @JsonFormat(pattern = "dd/MM/yyyy")//Informando o padrão da data
     protected LocalDate dataCriacao = LocalDate.now();
 
     public Pessoa(){
