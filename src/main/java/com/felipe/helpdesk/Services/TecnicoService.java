@@ -16,7 +16,7 @@ public class TecnicoService {
 	private TecnicoRepository repository;
 	
 	public Tecnico findById(Integer id) {
-		Optional<Tecnico> obj = repository.findById(id);
-		return obj.orElse(null);
+		Optional<Tecnico> obj = repository.findById(id);//O tipo de retorno indicado pelo JPA é o Optional
+		return obj.orElse(null); //orElse é a condicional de caso não tenha aquele técnico o retorno é nulo
 	}
 }
