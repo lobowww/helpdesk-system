@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.felipe.helpdesk.Services.TecnicoService;
 import com.felipe.helpdesk.domain.Tecnico;
 import com.felipe.helpdesk.domain.dtos.TecnicoDTO;
+import com.felipe.helpdesk.Services.TecnicoService;
 
 @RestController//Controlador Rest
 @RequestMapping(value = "/tecnicos")//Para adicionar o endpoint inicial para os serviços/ Para acessar um determinado recurso dos tecnicos eu acesso com o endpoint inicial com o valor em seguida

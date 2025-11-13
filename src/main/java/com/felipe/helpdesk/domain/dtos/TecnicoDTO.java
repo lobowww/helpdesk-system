@@ -88,7 +88,7 @@ public class TecnicoDTO implements Serializable{
 	}
 
 	public void addPerfil(Perfil perfil) {
-		this.perfis.add(perfil.getCodigo());
+		this.perfis.add(perfil.getCodigo());//Manter o padrão do addPerfil que tem na entidade
 	}
 
 	public LocalDate getDataCriacao() {
