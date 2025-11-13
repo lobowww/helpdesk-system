@@ -6,9 +6,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.felipe.helpdesk.Services.exceptions.DataIntegrityViolationException;
 import com.felipe.helpdesk.Services.exceptions.ObjectnotFoundException;
+import com.felipe.helpdesk.domain.Pessoa;
 import com.felipe.helpdesk.domain.Tecnico;
 import com.felipe.helpdesk.domain.dtos.TecnicoDTO;
+import com.felipe.helpdesk.repositories.PessoaRepository;
 import com.felipe.helpdesk.repositories.TecnicoRepository;
 
 @Service
@@ -17,6 +20,9 @@ public class TecnicoService {
 	//Injeta dependências
 	@Autowired//Quando digo isso é praticamente que quando precisamos instanciar uma classe afim de atributos, construtor, ou métodos para ser utilizados em outra parte, tem que colocar o @Autowired
 	private TecnicoRepository repository;
+	
+	@Autowired
+	private PessoaRepository pessoarepository;
 	
 	public Tecnico findById(Integer id) {
 		Optional<Tecnico> obj = repository.findById(id);//O tipo de retorno indicado pelo JPA é o Optional
@@ -30,7 +36,20 @@ public class TecnicoService {
 
 	public Tecnico create(TecnicoDTO objDTO) {
 		objDTO.setId(null);//Deixo o id nulo, pois caso seja passado um id na requisição o banco vai entender que é um update e não é o que desejamos
+		validaPorCpfEEmail(objDTO);
 		Tecnico newObj = new Tecnico(objDTO);//Como o acesso ao banco é indireto precisamos pensar nisso no momento de criar um novo obj / Lá em Tecnico será criado um novo construtor, que recebe o TecnicoDTO, com o padrão DTO para o processo reverso acontecer
 		return repository.save(newObj);//Retorna o salvamento do novo objeto
+	}
+
+	private void validaPorCpfEEmail(TecnicoDTO objDTO) {
+		Optional<Pessoa> obj = pessoarepository.findByCpf(objDTO.getCpf());
+		if(obj.isPresent() && obj.get().getId() != objDTO.getId()) {
+			throw new DataIntegrityViolationException("CPF já cadastrado no sistema!");
+		}
+		
+		obj = pessoarepository.findByEmail(objDTO.getEmail());
+		if(obj.isPresent() && obj.get().getId() != objDTO.getId()) {
+			throw new DataIntegrityViolationException("E-mail já cadastrado no sistema!");
+		}
 	}
 }
