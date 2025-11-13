@@ -1,5 +1,8 @@
 package com.felipe.helpdesk.resources;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,5 +35,12 @@ public class TecnicoResource {
 	public ResponseEntity<TecnicoDTO> findById(@PathVariable Integer id){//A alteração de Tecnico para TecnicoDTO trouxe um problema, o obj no retorno é do tipo Tecnico
 		Tecnico obj = service.findById(id);
 		return ResponseEntity.ok().body(new TecnicoDTO(obj));//Invés do obj eu pego meu DTO, lembra que o construtor recebe um objeto Tecnico? Entrega o obj para esse construtor
+	}
+	
+	@GetMapping //Basta no momento da requisição lançar o /tecnicos e pronto, findAll feito
+	public ResponseEntity<List<TecnicoDTO>> findAll(){
+		List<Tecnico> list = service.findAll();
+		List<TecnicoDTO> listDTO = list.stream().map(obj -> new TecnicoDTO(obj)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDTO);
 	}
 }

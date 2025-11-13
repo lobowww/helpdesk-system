@@ -1,5 +1,6 @@
 package com.felipe.helpdesk.Services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,5 +21,9 @@ public class TecnicoService {
 		Optional<Tecnico> obj = repository.findById(id);//O tipo de retorno indicado pelo JPA é o Optional
 		//return obj.orElse(null); //orElse é a condicional de caso não tenha aquele técnico o retorno é nulo
 		return obj.orElseThrow(() -> new ObjectnotFoundException("Objeto não encontrado! Id: " + id));//Senão será lançada uma exceção / () Função anônima recebe o objeto de exceção que leva uma mensagem
+	}
+
+	public List<Tecnico> findAll() {
+		return repository.findAll();
 	}
 }
