@@ -14,6 +14,8 @@ import com.felipe.helpdesk.domain.dtos.TecnicoDTO;
 import com.felipe.helpdesk.repositories.PessoaRepository;
 import com.felipe.helpdesk.repositories.TecnicoRepository;
 
+import jakarta.validation.Valid;
+
 @Service
 public class TecnicoService {
 	
@@ -40,7 +42,15 @@ public class TecnicoService {
 		Tecnico newObj = new Tecnico(objDTO);//Como o acesso ao banco é indireto precisamos pensar nisso no momento de criar um novo obj / Lá em Tecnico será criado um novo construtor, que recebe o TecnicoDTO, com o padrão DTO para o processo reverso acontecer
 		return repository.save(newObj);//Retorna o salvamento do novo objeto
 	}
-
+	
+	public Tecnico update(Integer id, @Valid TecnicoDTO objDTO) {
+		objDTO.setId(id);//Pode ser passado na URL um id e no corpo da requisição outro id - isso gera uma falha de segurança, logo eu seto o valor do id do objDTO com o id
+		Tecnico oldObj = findById(id);
+		validaPorCpfEEmail(objDTO);
+		oldObj = new Tecnico(objDTO);
+		return repository.save(oldObj);
+	}
+	
 	private void validaPorCpfEEmail(TecnicoDTO objDTO) {
 		Optional<Pessoa> obj = pessoarepository.findByCpf(objDTO.getCpf());
 		if(obj.isPresent() && obj.get().getId() != objDTO.getId()) {

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,5 +57,11 @@ public class TecnicoResource {
 		Tecnico newObj = service.create(objDTO);//Criação de um novo objeto Tecnico
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newObj.getId()).toUri();//Aqui instanciamos um objeto URI pegamos seu valor para incluir no retorno
 		return ResponseEntity.created(uri).build();//Para realizarmos a criação de um objeto o created pede uma URI, que é um acesso aquela informação como o /tecnico/1, para conseguir faça igual acima
+	}
+	
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<TecnicoDTO> upadate(@PathVariable Integer id, @Valid @RequestBody TecnicoDTO objDTO){
+		Tecnico obj = service.update(id, objDTO);
+		return ResponseEntity.ok().body(new TecnicoDTO(obj));
 	}
 }
