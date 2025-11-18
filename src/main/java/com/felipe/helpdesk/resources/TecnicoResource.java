@@ -16,6 +16,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.felipe.helpdesk.domain.Tecnico;
 import com.felipe.helpdesk.domain.dtos.TecnicoDTO;
+
+import jakarta.validation.Valid;
+
 import com.felipe.helpdesk.Services.TecnicoService;
 
 @RestController//Controlador Rest
@@ -49,7 +52,7 @@ public class TecnicoResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<TecnicoDTO> create(@RequestBody TecnicoDTO objDTO){
+	public ResponseEntity<TecnicoDTO> create(@Valid @RequestBody TecnicoDTO objDTO){//@Valid -  Verifica se há validação nos dados, no caso os @NotNull / @RequestBody - Indica o corpo da requisição
 		Tecnico newObj = service.create(objDTO);//Criação de um novo objeto Tecnico
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newObj.getId()).toUri();//Aqui instanciamos um objeto URI pegamos seu valor para incluir no retorno
 		return ResponseEntity.created(uri).build();//Para realizarmos a criação de um objeto o created pede uma URI, que é um acesso aquela informação como o /tecnico/1, para conseguir faça igual acima

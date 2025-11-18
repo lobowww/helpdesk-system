@@ -10,6 +10,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.felipe.helpdesk.domain.Tecnico;
 import com.felipe.helpdesk.domain.enums.Perfil;
 
+import jakarta.validation.constraints.NotNull;
+
 //DTO(OBJETO DE TRANFERÊNCIA DE DADOS)
 //Como fizemos anteriormente o teste da requisição no postman, vimos as informações diretamente das classes de model, essa não é uma boa prática, por isso temos que criar
 //os DTOs, os quais vão pegar os dados do obj e serve para demonstrá-los
@@ -18,9 +20,13 @@ public class TecnicoDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
     protected Integer id;
+    @NotNull(message= "O campo NOME é requerido")//Este campo não pode ser nulo
     protected String nome;
+    @NotNull(message= "O campo CPF é requerido")
     protected String cpf;
+    @NotNull(message= "O campo EMAIL é requerido")
     protected String email;
+    @NotNull(message= "O campo SENHA é requerido")
     protected String senha;
     protected Set<Integer> perfis = new HashSet<>();
     
