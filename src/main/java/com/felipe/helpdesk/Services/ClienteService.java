@@ -18,6 +18,7 @@ import jakarta.validation.Valid;
 
 @Service
 public class ClienteService {
+	
 	@Autowired
 	private ClienteRepository repository;
 	
@@ -28,6 +29,7 @@ public class ClienteService {
 		Optional<Cliente> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ObjectnotFoundException("Objeto não encontrado! Id: " + id));
 	}
+	
 	public List<Cliente> findAll() {
 		return repository.findAll();
 	}
