@@ -1,5 +1,6 @@
 package com.felipe.helpdesk.Services;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +43,13 @@ public class ChamadoService {
 		return repository.save(newChamado(objDTO));//Com o chamado criado salvo ele no banco
 	}
 	
+	public Chamado update(Integer id, @Valid ChamadoDTO objDTO) {
+		objDTO.setId(id);
+		Chamado oldObj = findById(id);
+		oldObj = newChamado(objDTO);
+		return repository.save(oldObj);
+	}
+	
 	private Chamado newChamado(ChamadoDTO obj) {//Recebi um chamado DTO e a partir dele começo a construir o meu chamado que vai ser salvo no banco
 		Tecnico tecnico = tecnicoService.findById(obj.getTecnico());
 		Cliente cliente = clienteService.findById(obj.getCliente());
@@ -49,6 +57,10 @@ public class ChamadoService {
 		Chamado chamado = new Chamado();
 		if(obj.getId() != null) {
 			chamado.setId(obj.getId());
+		}
+		
+		if(obj.getStatus().equals(2)) {//Caso eu atualize o status do chamado para encerrado o back providencia a data de fechamento daquele obj
+			chamado.setDataFechamento(LocalDate.now());
 		}
 		
 		chamado.setTecnico(tecnico);
